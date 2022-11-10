@@ -17,6 +17,13 @@ public class CatsInteractionController {
 
     @GetMapping("/pet")
     public Map<String, String> pet(@RequestParam(required = false) final Integer count) {
+        if (count == null) {
+            throw new IncorrectCountException("Параметр count равен null.");
+        }
+        if (count <= 0) {
+            throw new IncorrectCountException("Параметр count имеет отрицательное значение.");
+        }
+
         happiness += count;
         return Map.of("talk", "Муррр. ".repeat(count));
     }
@@ -45,10 +52,18 @@ public class CatsInteractionController {
         return Map.of("error", "Произошла ошибка!");
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, NullPointerException.class})
+   /* @ExceptionHandler({IllegalArgumentException.class, NullPointerException.class})
     // отлавливаем исключение NullPointerException
     public Map<String, String> handleIncorrectCount(final RuntimeException e) {
         // возвращаем сообщение об ошибке
+        return Map.of(
+                "error", "Ошибка с параметром count.",
+                "errorMessage", e.getMessage()
+        );
+    }
+*/
+    @ExceptionHandler
+    public Map<String, String> handle(final IncorrectCountException e) {
         return Map.of(
                 "error", "Ошибка с параметром count.",
                 "errorMessage", e.getMessage()
