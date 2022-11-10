@@ -26,7 +26,7 @@ public class DogsInteractionController {
         return Map.of("happiness", happiness);
     }
 
-    @ExceptionHandler
+/*    @ExceptionHandler
 // отлавливаем исключение IllegalArgumentException
     public Map<String, String> handleNegativeCount(final IllegalArgumentException e) {
         // возвращаем сообщение об ошибке
@@ -38,10 +38,20 @@ public class DogsInteractionController {
     public Map<String, String> handleNullCount(final NullPointerException e) {
         // возвращаем сообщение об ошибке
         return Map.of("error", "Параметр count не указан.");
-    }
+    }*/
 
     @ExceptionHandler
     public Map<String, String> nandleRuntimeException(RuntimeException e) {
         return Map.of("error", "Произошла ошибка!");
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class, NullPointerException.class})
+    // отлавливаем исключение NullPointerException
+    public Map<String, String> handleIncorrectCount(final RuntimeException e) {
+        // возвращаем сообщение об ошибке
+        return Map.of(
+                "error", "Ошибка с параметром count.",
+                "errorMessage", e.getMessage()
+        );
     }
 }
