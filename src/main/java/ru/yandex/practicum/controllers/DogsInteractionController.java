@@ -1,6 +1,8 @@
 package ru.yandex.practicum.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -32,40 +34,18 @@ public class DogsInteractionController {
         return Map.of("happiness", happiness);
     }
 
-/*    @ExceptionHandler
-// отлавливаем исключение IllegalArgumentException
-    public Map<String, String> handleNegativeCount(final IllegalArgumentException e) {
-        // возвращаем сообщение об ошибке
-        return Map.of("error", "Передан отрицательный параметр count.");
+    @GetMapping("/feed")
+    public Map<String, Integer> feed() {
+        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "Метод /feed ещё не реализован.");
     }
 
+    // замените возвращаемый объект
+    // добавьте код ответа
     @ExceptionHandler
-    // отлавливаем исключение NullPointerException
-    public Map<String, String> handleNullCount(final NullPointerException e) {
-        // возвращаем сообщение об ошибке
-        return Map.of("error", "Параметр count не указан.");
-    }*/
-
-    @ExceptionHandler
-    public Map<String, String> nandleRuntimeException(RuntimeException e) {
-        return Map.of("error", "Произошла ошибка!");
-    }
-
-  /*  @ExceptionHandler({IllegalArgumentException.class, NullPointerException.class})
-    // отлавливаем исключение NullPointerException
-    public Map<String, String> handleIncorrectCount(final RuntimeException e) {
-        // возвращаем сообщение об ошибке
-        return Map.of(
-                "error", "Ошибка с параметром count.",
-                "errorMessage", e.getMessage()
-        );
-    }*/
-
-    @ExceptionHandler
-    public Map<String, String> handle(final IncorrectCountException e) {
-        return Map.of(
-                "error", "Ошибка с параметром count.",
-                "errorMessage", e.getMessage()
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handle(final IncorrectCountException e) {
+        return new ErrorResponse(
+                "Ошибка с параметром count.", e.getMessage()
         );
     }
 }
